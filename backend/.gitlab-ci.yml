@@ -1,0 +1,108 @@
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  INFRA_REPO: "https://oauth2:${GITLAB_TOKEN}@gitlab.com/2foood/infrastructure.git"
+
+test:
+  image: golang:1.25
+  stage: test
+  script:
+    - go test -v ./...
+
+build-dev:
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build --build-arg SERVICE_PATH=./cmd/2food/main.go --target backend -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes:
+        - cmd/2food/**/*
+        - internal/**/*
+        - pkg/**/*
+        - config/**/*
+        - go.mod
+        - go.sum
+        - Dockerfile
+
+build-migrator:
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build --build-arg SERVICE_PATH=./cmd/migrator/migrator.go --target migrator -t $CI_REGISTRY_IMAGE/migrator:$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/migrator:$CI_COMMIT_SHORT_SHA
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main" || $CI_PIPELINE_SOURCE == 'merge_request_event'
+      changes:
+        - cmd/migrator/**/*
+        - migrations/**/*
+        - go.mod
+        - go.sum
+        - Dockerfile
+
+deploy-backend:
+  image: alpine:latest
+  stage: deploy
+  resource_group: infrastructure
+  before_script:
+    - apk add --no-cache git curl
+    - curl -L https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.3.0/kustomize_v5.3.0_linux_amd64.tar.gz -o kustomize.tar.gz
+    - tar -zxvf kustomize.tar.gz
+    - mv kustomize /usr/local/bin/
+    - chmod +x /usr/local/bin/kustomize
+    - git config --global user.email "ci-bot@gitlab.com"
+    - git config --global user.name "CI Bot"
+  script:
+    - git clone $INFRA_REPO infra-repo
+    - cd infra-repo/manifests/backend/overlays/dev
+    - kustomize edit set image registry.gitlab.com/2foood/backend=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+    - git commit -am "Update dev backend image to $CI_COMMIT_SHORT_SHA"
+    - git push origin HEAD:main
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes:
+        - cmd/2food/**/*
+        - internal/**/*
+        - pkg/**/*
+        - config/**/*
+        - go.mod
+        - go.sum
+        - Dockerfile
+
+deploy-migrator:
+  image: alpine:latest
+  stage: deploy
+  resource_group: infrastructure
+  before_script:
+    - apk add --no-cache git curl
+    - curl -L https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.3.0/kustomize_v5.3.0_linux_amd64.tar.gz -o kustomize.tar.gz
+    - tar -zxvf kustomize.tar.gz
+    - mv kustomize /usr/local/bin/
+    - chmod +x /usr/local/bin/kustomize
+    - git config --global user.email "ci-bot@gitlab.com"
+    - git config --global user.name "CI Bot"
+  script:
+    - git clone $INFRA_REPO infra-repo
+    - cd infra-repo/manifests/backend/overlays/dev
+    - kustomize edit set image registry.gitlab.com/2foood/backend/migrator=$CI_REGISTRY_IMAGE/migrator:$CI_COMMIT_SHORT_SHA
+    - git commit -am "Update dev migrator image to $CI_COMMIT_SHORT_SHA"
+    - git push origin HEAD:main
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes:
+        - cmd/migrator/**/*
+        - migrations/**/*
+        - go.mod
+        - go.sum
+        - Dockerfile
+

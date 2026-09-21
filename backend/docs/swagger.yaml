@@ -1,0 +1,3851 @@
+basePath: /api/v1
+definitions:
+  domain.City:
+    properties:
+      id:
+        type: integer
+      label:
+        type: string
+      name:
+        type: string
+    type: object
+  domain.CuisineType:
+    properties:
+      id:
+        type: integer
+      label:
+        type: string
+      name:
+        type: string
+    type: object
+  domain.DayHours:
+    properties:
+      close:
+        type: string
+      open:
+        type: string
+    type: object
+  domain.DevicePlatform:
+    enum:
+    - ios
+    - android
+    type: string
+    x-enum-varnames:
+    - DevicePlatformIOS
+    - DevicePlatformAndroid
+  domain.DietaryTag:
+    enum:
+    - halal
+    - vegetarian
+    - vegan
+    - gluten_free
+    - kosher
+    type: string
+    x-enum-varnames:
+    - DietaryTagHalal
+    - DietaryTagVegetarian
+    - DietaryTagVegan
+    - DietaryTagGlutenFree
+    - DietaryTagKosher
+  domain.Language:
+    enum:
+    - en
+    - kk
+    - en
+    - ru
+    - uk
+    - zh
+    type: string
+    x-enum-varnames:
+    - LanguageDefault
+    - LanguageKazakh
+    - LanguageEnglish
+    - LanguageRussian
+    - LanguageUkrainian
+    - LanguageChinese
+  domain.NotificationSettings:
+    properties:
+      order_updates:
+        type: boolean
+      promotions:
+        type: boolean
+    type: object
+  domain.Order:
+    properties:
+      created_at:
+        type: string
+      display_number:
+        type: string
+      id:
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/domain.OrderItem'
+        type: array
+      payment_id:
+        type: string
+      pickup_code:
+        type: string
+      pickup_window_end:
+        type: string
+      pickup_window_start:
+        type: string
+      restaurant_id:
+        type: string
+      reviewed_at:
+        type: string
+      status:
+        $ref: '#/definitions/domain.OrderStatus'
+      total_amount:
+        type: number
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  domain.OrderItem:
+    properties:
+      id:
+        type: string
+      order_id:
+        type: string
+      price:
+        type: number
+      product_id:
+        type: string
+      product_name:
+        type: string
+      quantity:
+        type: integer
+    type: object
+  domain.OrderReason:
+    enum:
+    - out_of_stock
+    - payment_timeout
+    - internal_system_error
+    - failed_audit
+    - payment_failed
+    type: string
+    x-enum-varnames:
+    - OrderReasonOutOfStock
+    - OrderReasonTimeout
+    - OrderReasonInternalSystemError
+    - OrderReasonFailedAudit
+    - OrderReasonPaymentFailed
+  domain.OrderStatus:
+    enum:
+    - PENDING
+    - PAID
+    - ACCEPTED
+    - READY
+    - COLLECTED
+    - CANCELLED
+    - UNPAID
+    type: string
+    x-enum-varnames:
+    - OrderStatusPending
+    - OrderStatusPaid
+    - OrderStatusAccepted
+    - OrderStatusReady
+    - OrderStatusCollected
+    - OrderStatusCancelled
+    - OrderStatusUnpaid
+  domain.OrderStatusHistoryEntry:
+    properties:
+      actor_id:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      new_status:
+        $ref: '#/definitions/domain.OrderStatus'
+      old_status:
+        $ref: '#/definitions/domain.OrderStatus'
+      order_id:
+        type: string
+      reason:
+        $ref: '#/definitions/domain.OrderReason'
+    type: object
+  domain.Product:
+    properties:
+      category:
+        $ref: '#/definitions/domain.ProductCategory'
+      category_id:
+        type: integer
+      created_at:
+        type: string
+      description:
+        type: string
+      discounted_price:
+        type: number
+      id:
+        type: string
+      image_url:
+        type: string
+      is_active:
+        type: boolean
+      name:
+        type: string
+      original_price:
+        type: number
+      pickup_time_end:
+        type: string
+      pickup_time_start:
+        type: string
+      quantity_available:
+        type: integer
+      restaurant_id:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  domain.ProductCategory:
+    properties:
+      id:
+        type: integer
+      label:
+        type: string
+      name:
+        type: string
+    type: object
+  domain.Restaurant:
+    properties:
+      address:
+        type: string
+      city:
+        $ref: '#/definitions/domain.City'
+      city_id:
+        type: integer
+      created_at:
+        type: string
+      cuisine_types:
+        items:
+          $ref: '#/definitions/domain.CuisineType'
+        type: array
+      description:
+        type: string
+      id:
+        type: string
+      image_url:
+        type: string
+      is_active:
+        type: boolean
+      latitude:
+        type: number
+      longitude:
+        type: number
+      name:
+        type: string
+      phone:
+        type: string
+      rating_avg:
+        type: number
+      rating_count:
+        type: integer
+      role:
+        $ref: '#/definitions/domain.StaffRole'
+      social_links:
+        $ref: '#/definitions/domain.SocialLinks'
+      updated_at:
+        type: string
+      website:
+        type: string
+      working_hours:
+        $ref: '#/definitions/domain.WorkingHours'
+    type: object
+  domain.RestaurantStaff:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      restaurant_id:
+        type: string
+      role:
+        $ref: '#/definitions/domain.StaffRole'
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  domain.Review:
+    properties:
+      author_avatar_url:
+        type: string
+      author_name:
+        type: string
+      comment:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      is_hidden:
+        type: boolean
+      order_id:
+        type: string
+      photo_urls:
+        items:
+          type: string
+        type: array
+      rating:
+        type: integer
+      replied_at:
+        type: string
+      reply:
+        type: string
+      restaurant_id:
+        type: string
+      restaurant_name:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  domain.ReviewPhoto:
+    properties:
+      author_avatar_url:
+        type: string
+      author_name:
+        type: string
+      comment:
+        type: string
+      created_at:
+        type: string
+      rating:
+        type: integer
+      replied_at:
+        type: string
+      reply:
+        type: string
+      review_id:
+        type: string
+      url:
+        type: string
+    type: object
+  domain.SocialLinks:
+    properties:
+      instagram:
+        type: string
+      telegram:
+        type: string
+    type: object
+  domain.StaffRole:
+    enum:
+    - manager
+    - owner
+    type: string
+    x-enum-varnames:
+    - StaffRoleManager
+    - StaffRoleOwner
+  domain.TokenPair:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  domain.User:
+    properties:
+      avatar_url:
+        type: string
+      city_id:
+        type: integer
+      created_at:
+        type: string
+      dietary_preferences:
+        items:
+          $ref: '#/definitions/domain.DietaryTag'
+        type: array
+      email:
+        type: string
+      id:
+        type: string
+      language:
+        $ref: '#/definitions/domain.Language'
+      name:
+        type: string
+      notification_settings:
+        $ref: '#/definitions/domain.NotificationSettings'
+      phone:
+        type: string
+      role:
+        $ref: '#/definitions/domain.UserRole'
+      updated_at:
+        type: string
+    type: object
+  domain.UserRole:
+    enum:
+    - customer
+    - partner
+    - admin
+    type: string
+    x-enum-varnames:
+    - UserRoleCustomer
+    - UserRolePartner
+    - UserRoleAdmin
+  domain.WorkingHours:
+    properties:
+      fri:
+        $ref: '#/definitions/domain.DayHours'
+      mon:
+        $ref: '#/definitions/domain.DayHours'
+      sat:
+        $ref: '#/definitions/domain.DayHours'
+      sun:
+        $ref: '#/definitions/domain.DayHours'
+      thu:
+        $ref: '#/definitions/domain.DayHours'
+      tue:
+        $ref: '#/definitions/domain.DayHours'
+      wed:
+        $ref: '#/definitions/domain.DayHours'
+    type: object
+  http.AddReplyRequest:
+    properties:
+      reply:
+        maxLength: 1000
+        minLength: 1
+        type: string
+    required:
+    - reply
+    type: object
+  http.AddStaffRequest:
+    properties:
+      role:
+        allOf:
+        - $ref: '#/definitions/domain.StaffRole'
+        enum:
+        - manager
+      user_id:
+        type: string
+    required:
+    - role
+    - user_id
+    type: object
+  http.AssignOwnerRequest:
+    properties:
+      user_id:
+        type: string
+    required:
+    - user_id
+    type: object
+  http.AuthResponse:
+    properties:
+      status:
+        example: success
+        type: string
+      tokens:
+        $ref: '#/definitions/domain.TokenPair'
+      user:
+        $ref: '#/definitions/domain.User'
+    type: object
+  http.CancelByRestaurantRequest:
+    properties:
+      reason:
+        allOf:
+        - $ref: '#/definitions/domain.OrderReason'
+        maxLength: 500
+        minLength: 10
+    required:
+    - reason
+    type: object
+  http.CancelByUserRequest:
+    properties:
+      reason:
+        allOf:
+        - $ref: '#/definitions/domain.OrderReason'
+        maxLength: 500
+        minLength: 10
+    type: object
+  http.CitiesResponse:
+    properties:
+      cities:
+        items:
+          $ref: '#/definitions/domain.City'
+        type: array
+    type: object
+  http.CityResponse:
+    properties:
+      city:
+        $ref: '#/definitions/domain.City'
+    type: object
+  http.CompleteGoogleLoginRequest:
+    properties:
+      code:
+        type: string
+      phone:
+        type: string
+      session_id:
+        type: string
+    required:
+    - code
+    - phone
+    - session_id
+    type: object
+  http.CreateCityRequest:
+    properties:
+      label:
+        maxLength: 50
+        minLength: 2
+        type: string
+      name:
+        maxLength: 50
+        minLength: 2
+        type: string
+    required:
+    - label
+    - name
+    type: object
+  http.CreateCuisineTypeRequest:
+    properties:
+      label:
+        maxLength: 50
+        minLength: 2
+        type: string
+      name:
+        maxLength: 50
+        minLength: 2
+        type: string
+    required:
+    - label
+    - name
+    type: object
+  http.CreateOrderItemDTO:
+    properties:
+      product_id:
+        type: string
+      quantity:
+        minimum: 1
+        type: integer
+    required:
+    - product_id
+    - quantity
+    type: object
+  http.CreateOrderRequest:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/http.CreateOrderItemDTO'
+        minItems: 1
+        type: array
+      pickup_window_end:
+        type: string
+      pickup_window_start:
+        type: string
+      restaurant_id:
+        type: string
+    required:
+    - items
+    - pickup_window_end
+    - pickup_window_start
+    - restaurant_id
+    type: object
+  http.CreateOrderResponse:
+    properties:
+      client_secret:
+        type: string
+      order:
+        $ref: '#/definitions/domain.Order'
+    type: object
+  http.CreateProductCategoryRequest:
+    properties:
+      label:
+        maxLength: 50
+        minLength: 2
+        type: string
+      name:
+        maxLength: 50
+        minLength: 2
+        type: string
+    required:
+    - label
+    - name
+    type: object
+  http.CreateProductRequest:
+    properties:
+      category_id:
+        type: integer
+      description:
+        type: string
+      discounted_price:
+        type: number
+      image_url:
+        type: string
+      name:
+        maxLength: 255
+        minLength: 2
+        type: string
+      original_price:
+        type: number
+      pickup_time_end:
+        type: string
+      pickup_time_start:
+        type: string
+      quantity_available:
+        minimum: 0
+        type: integer
+    required:
+    - discounted_price
+    - name
+    - original_price
+    - pickup_time_end
+    - pickup_time_start
+    - quantity_available
+    type: object
+  http.CreateRestaurantRequest:
+    properties:
+      address:
+        type: string
+      city_id:
+        type: integer
+      description:
+        type: string
+      image_url:
+        type: string
+      latitude:
+        maximum: 90
+        minimum: -90
+        type: number
+      longitude:
+        maximum: 180
+        minimum: -180
+        type: number
+      name:
+        minLength: 2
+        type: string
+      owner_id:
+        type: string
+      phone:
+        type: string
+      social_links:
+        $ref: '#/definitions/domain.SocialLinks'
+      website:
+        type: string
+      working_hours:
+        $ref: '#/definitions/domain.WorkingHours'
+    required:
+    - name
+    - owner_id
+    type: object
+  http.CreateReviewRequest:
+    properties:
+      comment:
+        maxLength: 1000
+        minLength: 1
+        type: string
+      photo_urls:
+        items:
+          type: string
+        maxItems: 5
+        type: array
+      rating:
+        maximum: 5
+        minimum: 1
+        type: integer
+    required:
+    - rating
+    type: object
+  http.CuisineTypeResponse:
+    properties:
+      cuisine_type:
+        $ref: '#/definitions/domain.CuisineType'
+    type: object
+  http.CuisineTypesResponse:
+    properties:
+      cuisine_types:
+        items:
+          $ref: '#/definitions/domain.CuisineType'
+        type: array
+    type: object
+  http.DeleteDeviceTokenRequest:
+    properties:
+      token:
+        type: string
+    required:
+    - token
+    type: object
+  http.DeleteRequest:
+    properties:
+      file_url:
+        type: string
+    required:
+    - file_url
+    type: object
+  http.EmailSendOTPRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  http.GoogleLoginRequest:
+    properties:
+      id_token:
+        type: string
+    required:
+    - id_token
+    type: object
+  http.LinkGoogleRequest:
+    properties:
+      id_token:
+        type: string
+    required:
+    - id_token
+    type: object
+  http.MarkAsCollectedRequest:
+    properties:
+      force:
+        description: flag for skipping pickup code validation
+        type: boolean
+      pickup_code:
+        type: string
+    type: object
+  http.OAuthNeedPhoneResponse:
+    properties:
+      session_id:
+        example: u-u-i-d
+        type: string
+      status:
+        example: need_phone
+        type: string
+    type: object
+  http.OrderResponse:
+    properties:
+      order:
+        $ref: '#/definitions/domain.Order'
+    type: object
+  http.OrdersResponse:
+    properties:
+      orders:
+        items:
+          $ref: '#/definitions/domain.Order'
+        type: array
+    type: object
+  http.PhoneLoginRequest:
+    properties:
+      code:
+        type: string
+      phone:
+        type: string
+    required:
+    - code
+    - phone
+    type: object
+  http.PhoneSendOTPRequest:
+    properties:
+      phone:
+        type: string
+    required:
+    - phone
+    type: object
+  http.PresignRequest:
+    properties:
+      content_type:
+        enum:
+        - image/jpeg
+        - image/png
+        - image/webp
+        type: string
+      target:
+        description: folder name
+        enum:
+        - avatar
+        - restaurant_logo
+        - restaurant_banner
+        - product
+        - category
+        - review
+        type: string
+    required:
+    - content_type
+    - target
+    type: object
+  http.PresignResponse:
+    properties:
+      file_url:
+        type: string
+      upload_url:
+        type: string
+    type: object
+  http.ProductCategoriesResponse:
+    properties:
+      product_categories:
+        items:
+          $ref: '#/definitions/domain.ProductCategory'
+        type: array
+    type: object
+  http.ProductCategoryResponse:
+    properties:
+      product_category:
+        $ref: '#/definitions/domain.ProductCategory'
+    type: object
+  http.ProductResponse:
+    properties:
+      product:
+        $ref: '#/definitions/domain.Product'
+    type: object
+  http.ProductsResponse:
+    properties:
+      products:
+        items:
+          $ref: '#/definitions/domain.Product'
+        type: array
+    type: object
+  http.RefreshRequest:
+    properties:
+      refresh_token:
+        type: string
+    required:
+    - refresh_token
+    type: object
+  http.RefreshResponse:
+    properties:
+      tokens:
+        $ref: '#/definitions/domain.TokenPair'
+    type: object
+  http.RegisterDeviceTokenRequest:
+    properties:
+      platform:
+        allOf:
+        - $ref: '#/definitions/domain.DevicePlatform'
+        enum:
+        - ios
+        - android
+      token:
+        type: string
+    required:
+    - platform
+    - token
+    type: object
+  http.RestaurantResponse:
+    properties:
+      restaurant:
+        $ref: '#/definitions/domain.Restaurant'
+    type: object
+  http.RestaurantsResponse:
+    properties:
+      restaurants:
+        items:
+          $ref: '#/definitions/domain.Restaurant'
+        type: array
+    type: object
+  http.ReviewPhotosResponse:
+    properties:
+      photos:
+        items:
+          $ref: '#/definitions/domain.ReviewPhoto'
+        type: array
+    type: object
+  http.ReviewResponse:
+    properties:
+      review:
+        $ref: '#/definitions/domain.Review'
+    type: object
+  http.ReviewsResponse:
+    properties:
+      reviews:
+        items:
+          $ref: '#/definitions/domain.Review'
+        type: array
+    type: object
+  http.StaffResponse:
+    properties:
+      staff:
+        items:
+          $ref: '#/definitions/domain.RestaurantStaff'
+        type: array
+    type: object
+  http.StatusHistoryResponse:
+    properties:
+      history:
+        items:
+          $ref: '#/definitions/domain.OrderStatusHistoryEntry'
+        type: array
+    type: object
+  http.UpdateCuisinesRequest:
+    properties:
+      cuisine_ids:
+        items:
+          type: integer
+        type: array
+    required:
+    - cuisine_ids
+    type: object
+  http.UpdateEmailRequest:
+    properties:
+      code:
+        type: string
+      email:
+        type: string
+    required:
+    - code
+    - email
+    type: object
+  http.UpdatePhoneRequest:
+    properties:
+      code:
+        type: string
+      phone:
+        type: string
+    required:
+    - code
+    - phone
+    type: object
+  http.UpdateProductRequest:
+    properties:
+      category_id:
+        type: integer
+      description:
+        type: string
+      discounted_price:
+        type: number
+      image_url:
+        type: string
+      name:
+        maxLength: 255
+        minLength: 2
+        type: string
+      original_price:
+        type: number
+      pickup_time_end:
+        type: string
+      pickup_time_start:
+        type: string
+    type: object
+  http.UpdateRestaurantRequest:
+    properties:
+      address:
+        type: string
+      city_id:
+        type: integer
+      description:
+        type: string
+      image_url:
+        type: string
+      latitude:
+        maximum: 90
+        minimum: -90
+        type: number
+      longitude:
+        maximum: 180
+        minimum: -180
+        type: number
+      name:
+        minLength: 2
+        type: string
+      phone:
+        type: string
+      social_links:
+        $ref: '#/definitions/domain.SocialLinks'
+      website:
+        type: string
+      working_hours:
+        $ref: '#/definitions/domain.WorkingHours'
+    type: object
+  http.UpdateStaffRoleRequest:
+    properties:
+      role:
+        allOf:
+        - $ref: '#/definitions/domain.StaffRole'
+        enum:
+        - manager
+    required:
+    - role
+    type: object
+  http.UpdateStatusRequest:
+    properties:
+      is_active:
+        type: boolean
+    required:
+    - is_active
+    type: object
+  http.UpdateStockRequest:
+    properties:
+      quantity:
+        minimum: 0
+        type: integer
+    required:
+    - quantity
+    type: object
+  http.UpdateUserRequest:
+    properties:
+      avatar_url:
+        type: string
+      city_id:
+        type: integer
+      dietary_preferences:
+        items:
+          $ref: '#/definitions/domain.DietaryTag'
+        type: array
+      language:
+        allOf:
+        - $ref: '#/definitions/domain.Language'
+        enum:
+        - kk
+        - en
+        - ru
+        - uk
+        - zh
+      name:
+        type: string
+      notification_settings:
+        $ref: '#/definitions/domain.NotificationSettings'
+    type: object
+  http.UserResponse:
+    properties:
+      user:
+        $ref: '#/definitions/domain.User'
+    type: object
+  respond.ErrorResponse:
+    properties:
+      code:
+        description: code for frontend
+        type: string
+      details:
+        additionalProperties:
+          type: string
+        description: for validation errors
+        type: object
+      message:
+        description: text for logs/debug
+        type: string
+    type: object
+  respond.MessageResponse:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API documentation for the 2food backend service.
+  title: 2food API
+  version: "1.0"
+paths:
+  /admin/catalog/cities:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new city and assigns the specified user as the owner.
+        Caller must be an admin.
+      parameters:
+      - description: City data and owner ID
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.CreateCityRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created city
+          schema:
+            $ref: '#/definitions/http.CityResponse'
+        "400":
+          description: Validation error or invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Create a new city
+      tags:
+      - catalog
+  /admin/catalog/cities/{city_id}:
+    delete:
+      description: Deletes a city from the system. Caller must be an admin.
+      parameters:
+      - description: City ID
+        in: path
+        name: city_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content - City successfully deleted
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: City not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Delete a city
+      tags:
+      - catalog
+  /admin/catalog/cuisine-types:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new cuisine type and assigns the specified user as the
+        owner. Caller must be an admin.
+      parameters:
+      - description: Cuisine type data and owner ID
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.CreateCuisineTypeRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created cuisine type
+          schema:
+            $ref: '#/definitions/http.CuisineTypeResponse'
+        "400":
+          description: Validation error or invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Create a new cuisine type
+      tags:
+      - catalog
+  /admin/catalog/cuisine-types/{cuisine_type_id}:
+    delete:
+      description: Deletes a cuisine type from the system. Caller must be an admin.
+      parameters:
+      - description: Cuisine type ID
+        in: path
+        name: cuisine_type_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content - Cuisine type successfully deleted
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Cuisine type not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Delete a cuisine type
+      tags:
+      - catalog
+  /admin/catalog/product-categories:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new product category and assigns the specified user as
+        the owner. Caller must be an admin.
+      parameters:
+      - description: Product category data and owner ID
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.CreateProductCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created product category
+          schema:
+            $ref: '#/definitions/http.ProductCategoryResponse'
+        "400":
+          description: Validation error or invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Create a new product category
+      tags:
+      - catalog
+  /admin/catalog/product-categories/{product_category_id}:
+    delete:
+      description: Deletes a product category from the system. Caller must be an admin.
+      parameters:
+      - description: Product category ID
+        in: path
+        name: product_category_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content - Product category successfully deleted
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Product category not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Delete a product category
+      tags:
+      - catalog
+  /admin/restaurants:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new restaurant and assigns the specified user as the
+        owner. Caller must be an admin.
+      parameters:
+      - description: Restaurant data and owner ID
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.CreateRestaurantRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created restaurant
+          schema:
+            $ref: '#/definitions/http.RestaurantResponse'
+        "400":
+          description: Validation error or invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Create a new restaurant
+      tags:
+      - restaurants
+  /admin/restaurants/{id}:
+    delete:
+      description: Deletes a restaurant from the system. Caller must be an admin.
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content - Restaurant successfully deleted
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Restaurant not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Delete a restaurant
+      tags:
+      - restaurants
+  /admin/restaurants/{id}/owner:
+    patch:
+      description: Assigns an owner to a restaurant. Caller must be an admin.
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Owner data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.AssignOwnerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Owner assigned successfully
+          schema:
+            $ref: '#/definitions/respond.MessageResponse'
+        "400":
+          description: Validation error or invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Restaurant not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Assign owner to a restaurant
+      tags:
+      - restaurants
+  /admin/reviews:
+    get:
+      description: Retrieves all reviews
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reviews
+          schema:
+            $ref: '#/definitions/http.ReviewsResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get all reviews
+      tags:
+      - reviews
+  /admin/reviews/{reviewID}/hide:
+    patch:
+      description: Hides a specific review
+      parameters:
+      - description: Review ID
+        format: uuid
+        in: path
+        name: reviewID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Review hidden
+          schema:
+            $ref: '#/definitions/http.ReviewResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Review not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Hide a review
+      tags:
+      - reviews
+  /admin/reviews/{reviewID}/unhide:
+    patch:
+      description: Unhides a specific review
+      parameters:
+      - description: Review ID
+        format: uuid
+        in: path
+        name: reviewID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Review unhidden
+          schema:
+            $ref: '#/definitions/http.ReviewResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Review not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Unhide a review
+      tags:
+      - reviews
+  /auth/email/otp:
+    post:
+      consumes:
+      - application/json
+      description: Requests a One-Time Password (OTP) to be sent to the specified
+        email address
+      parameters:
+      - description: Data for sending OTP
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.EmailSendOTPRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message (code sent)
+          schema:
+            $ref: '#/definitions/respond.MessageResponse'
+        "400":
+          description: Validation error or invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "429":
+          description: Too many attempts
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Send OTP via email
+      tags:
+      - auth
+  /auth/google/complete:
+    post:
+      consumes:
+      - application/json
+      description: Completes the Google login process by linking the phone number
+        to the account
+      parameters:
+      - description: Data for completing Google login
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.CompleteGoogleLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Google login completed successfully
+          schema:
+            $ref: '#/definitions/http.AuthResponse'
+        "400":
+          description: Validation error, invalid JSON, or invalid code
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Invalid or expired session ID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Complete Google login
+      tags:
+      - auth
+  /auth/google/login:
+    post:
+      consumes:
+      - application/json
+      description: Authorizes the user via Google ID Token. If the account is new
+        and requires phone binding, returns StatusNeedPhone and a pre-auth token.
+      parameters:
+      - description: Google ID Token
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.GoogleLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful authorization
+          schema:
+            $ref: '#/definitions/http.AuthResponse'
+        "202":
+          description: User needs to bind phone number
+          schema:
+            $ref: '#/definitions/http.OAuthNeedPhoneResponse'
+        "400":
+          description: Invalid token or validation error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Login with Google
+      tags:
+      - auth
+  /auth/link/google:
+    post:
+      consumes:
+      - application/json
+      description: Links a Google ID to an already existing authenticated account
+      parameters:
+      - description: Google ID Token
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.LinkGoogleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Google account successfully linked
+          schema:
+            $ref: '#/definitions/respond.MessageResponse'
+        "400":
+          description: Invalid token or validation error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "409":
+          description: Google account already linked
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Link Google account
+      tags:
+      - auth
+  /auth/phone/login:
+    post:
+      consumes:
+      - application/json
+      description: Verifies the OTP code and authorizes the user, returning access
+        and refresh tokens
+      parameters:
+      - description: Login credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.PhoneLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful authorization
+          schema:
+            $ref: '#/definitions/http.AuthResponse'
+        "400":
+          description: Invalid code, validation error, or invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Invalid or expired token/code
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Login with phone number
+      tags:
+      - auth
+  /auth/phone/otp:
+    post:
+      consumes:
+      - application/json
+      description: Requests a One-Time Password (OTP) to be sent to the specified
+        phone number
+      parameters:
+      - description: Data for sending OTP
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.PhoneSendOTPRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message (code sent)
+          schema:
+            $ref: '#/definitions/respond.MessageResponse'
+        "400":
+          description: Validation error or invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "429":
+          description: Too many attempts
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Send OTP via SMS
+      tags:
+      - auth
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Issues a new pair of Access and Refresh tokens using a valid Refresh
+        token
+      parameters:
+      - description: Refresh token
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.RefreshRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: New pair of tokens
+          schema:
+            $ref: '#/definitions/http.RefreshResponse'
+        "400":
+          description: Validation error or invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Refresh token is expired or invalid
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Refresh tokens
+      tags:
+      - auth
+  /catalog/cities:
+    get:
+      description: Returns a list of all available cities
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of cities
+          schema:
+            $ref: '#/definitions/http.CitiesResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Get all cities
+      tags:
+      - catalog
+  /catalog/cities/{city_id}:
+    get:
+      description: Returns a single city by its ID
+      parameters:
+      - description: City ID
+        in: path
+        name: city_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: City
+          schema:
+            $ref: '#/definitions/http.CityResponse'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: City not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Get city by ID
+      tags:
+      - catalog
+  /catalog/cuisine-types:
+    get:
+      description: Returns a list of all available cuisine types
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of cuisine types
+          schema:
+            $ref: '#/definitions/http.CuisineTypesResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Get all cuisine types
+      tags:
+      - catalog
+  /catalog/cuisine-types/{cuisine_type_id}:
+    get:
+      description: Returns a single cuisine type by its ID
+      parameters:
+      - description: Cuisine type ID
+        in: path
+        name: cuisine_type_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Cuisine type
+          schema:
+            $ref: '#/definitions/http.CuisineTypeResponse'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Cuisine type not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Get cuisine type by ID
+      tags:
+      - catalog
+  /catalog/product-categories:
+    get:
+      description: Returns a list of all available product categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of product categories
+          schema:
+            $ref: '#/definitions/http.ProductCategoriesResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Get all product categories
+      tags:
+      - catalog
+  /catalog/product-categories/{product_category_id}:
+    get:
+      description: Returns a single product category by its ID
+      parameters:
+      - description: Product category ID
+        in: path
+        name: product_category_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product category
+          schema:
+            $ref: '#/definitions/http.ProductCategoryResponse'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Product category not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Get product category by ID
+      tags:
+      - catalog
+  /orders:
+    get:
+      description: Retrieves a list of all orders placed by the current authenticated
+        user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of user's orders
+          schema:
+            $ref: '#/definitions/http.OrdersResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get user orders
+      tags:
+      - orders
+    post:
+      consumes:
+      - application/json
+      description: Creates a new order from a cart and returns a Stripe client secret
+        for payment execution
+      parameters:
+      - description: Order details
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.CreateOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created order and payment intent client secret
+          schema:
+            $ref: '#/definitions/http.CreateOrderResponse'
+        "400":
+          description: Validation error, invalid JSON, or stock issues
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Create a new order
+      tags:
+      - orders
+  /orders/{orderID}:
+    delete:
+      consumes:
+      - application/json
+      description: Allows a user to cancel their order (if permitted by current order
+        status)
+      parameters:
+      - description: Order ID
+        format: uuid
+        in: path
+        name: orderID
+        required: true
+        type: string
+      - description: Cancellation reason (optional)
+        in: body
+        name: input
+        schema:
+          $ref: '#/definitions/http.CancelByUserRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content - Order successfully cancelled
+        "400":
+          description: Invalid JSON/UUID or invalid status transition
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "409":
+          description: Conflict - Order cannot be cancelled anymore
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Cancel order
+      tags:
+      - orders
+    get:
+      description: Retrieves detailed information about a specific order belonging
+        to the current user
+      parameters:
+      - description: Order ID
+        format: uuid
+        in: path
+        name: orderID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Order details
+          schema:
+            $ref: '#/definitions/http.OrderResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Order not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get order by ID
+      tags:
+      - orders
+  /orders/{orderID}/history:
+    get:
+      description: Retrieves the complete history of status changes for a specific
+        order
+      parameters:
+      - description: Order ID
+        format: uuid
+        in: path
+        name: orderID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of status changes
+          schema:
+            $ref: '#/definitions/http.StatusHistoryResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get order status history
+      tags:
+      - orders
+  /orders/{orderID}/review:
+    get:
+      description: Retrieves a review for a specific order
+      parameters:
+      - description: Order ID
+        format: uuid
+        in: path
+        name: orderID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Review
+          schema:
+            $ref: '#/definitions/http.ReviewResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Order not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get review by order
+      tags:
+      - reviews
+    post:
+      consumes:
+      - application/json
+      description: Creates a new review for a specific order
+      parameters:
+      - description: Review details
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.CreateReviewRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created review
+          schema:
+            $ref: '#/definitions/http.ReviewResponse'
+        "400":
+          description: Validation error, invalid JSON, or stock issues
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Order not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "409":
+          description: Review already exists
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Create a new review
+      tags:
+      - reviews
+  /partner/restaurants:
+    get:
+      description: Retrieves a list of restaurants associated with the currently authenticated
+        partner
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of partner's restaurants
+          schema:
+            $ref: '#/definitions/http.RestaurantsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get partner's restaurants
+      tags:
+      - restaurants
+  /partner/restaurants/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Updates information for a specific restaurant. Caller must be an
+        owner.
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated restaurant data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.UpdateRestaurantRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated restaurant info
+          schema:
+            $ref: '#/definitions/http.RestaurantResponse'
+        "400":
+          description: Validation error or invalid UUID/JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Restaurant not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Update restaurant info
+      tags:
+      - restaurants
+  /partner/restaurants/{id}/cuisines:
+    patch:
+      consumes:
+      - application/json
+      description: Replaces the cuisine types associated with a restaurant. Caller
+        must be an owner.
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: List of cuisine type IDs
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.UpdateCuisinesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated restaurant
+          schema:
+            $ref: '#/definitions/http.RestaurantResponse'
+        "400":
+          description: Validation error or invalid UUID/JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Restaurant not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Update restaurant cuisine types
+      tags:
+      - restaurants
+  /partner/restaurants/{id}/staff:
+    get:
+      description: Retrieves a list of all staff members for a specific restaurant
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of staff members
+          schema:
+            $ref: '#/definitions/http.StaffResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get restaurant staff
+      tags:
+      - restaurants
+      - staff
+    post:
+      consumes:
+      - application/json
+      description: Adds a new staff member to the restaurant. Caller must be an owner.
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Staff data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.AddStaffRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Staff added successfully
+          schema:
+            $ref: '#/definitions/respond.MessageResponse'
+        "400":
+          description: Validation error or invalid UUID/JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "409":
+          description: Staff member already exists
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Add staff to restaurant
+      tags:
+      - restaurants
+      - staff
+  /partner/restaurants/{id}/staff/{userID}:
+    delete:
+      description: Removes a staff member from the restaurant. Caller must be an owner.
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User ID
+        format: uuid
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content - Staff successfully removed
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Staff member not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Remove staff member
+      tags:
+      - restaurants
+      - staff
+    patch:
+      consumes:
+      - application/json
+      description: Updates the role of a specific staff member. Caller must be an
+        owner.
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User ID
+        format: uuid
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: New role data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.UpdateStaffRoleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Role successfully updated
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Validation error or invalid UUID/JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Staff member not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Update staff role
+      tags:
+      - restaurants
+      - staff
+  /partner/restaurants/{id}/staff/{userID}/ownership:
+    patch:
+      consumes:
+      - application/json
+      description: Transfers ownership of a restaurant to a new user. Caller must
+        be an owner.
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User ID
+        format: uuid
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Ownership transferred successfully
+          schema:
+            $ref: '#/definitions/respond.MessageResponse'
+        "400":
+          description: Validation error or invalid UUID/JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Staff member not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Transfer ownership of a restaurant
+      tags:
+      - restaurants
+      - staff
+  /partner/restaurants/{restaurantID}/orders:
+    get:
+      description: Retrieves all orders for a specific restaurant. Caller must be
+        a restaurant staff member.
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: restaurantID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of all restaurant orders
+          schema:
+            $ref: '#/definitions/http.OrdersResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get all restaurant orders
+      tags:
+      - restaurant-orders
+  /partner/restaurants/{restaurantID}/orders/{orderID}:
+    delete:
+      consumes:
+      - application/json
+      description: Allows a restaurant staff member to cancel an order and provide
+        a reason
+      parameters:
+      - description: Order ID
+        format: uuid
+        in: path
+        name: orderID
+        required: true
+        type: string
+      - description: Cancellation reason
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.CancelByRestaurantRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content - Order successfully cancelled
+        "400":
+          description: Invalid JSON/UUID or validation error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "409":
+          description: Invalid status transition
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Cancel order (Restaurant)
+      tags:
+      - restaurant-orders
+  /partner/restaurants/{restaurantID}/orders/{orderID}/accept:
+    patch:
+      description: Updates order status to 'Accepted/Preparing' and notifies the customer.
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: restaurantID
+        required: true
+        type: string
+      - description: Order ID
+        format: uuid
+        in: path
+        name: orderID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content - Order marked as accepted
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "409":
+          description: Invalid status transition
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Mark order as accepted (in work)
+      tags:
+      - restaurant-orders
+  /partner/restaurants/{restaurantID}/orders/{orderID}/collect:
+    patch:
+      consumes:
+      - application/json
+      description: Updates order status to 'Completed/Collected'. Requires valid PIN
+        code unless force=true.
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: restaurantID
+        required: true
+        type: string
+      - description: Order ID
+        format: uuid
+        in: path
+        name: orderID
+        required: true
+        type: string
+      - description: Pickup code and force flag
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.MarkAsCollectedRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content - Order marked as collected
+        "400":
+          description: Invalid JSON/UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied or invalid pickup code
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "409":
+          description: Invalid status transition
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Mark order as collected
+      tags:
+      - restaurant-orders
+  /partner/restaurants/{restaurantID}/orders/{orderID}/ready:
+    patch:
+      description: Updates order status to 'Ready for Pickup'. Caller must be a restaurant
+        staff member.
+      parameters:
+      - description: Order ID
+        format: uuid
+        in: path
+        name: orderID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content - Order marked as ready
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "409":
+          description: Invalid status transition
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Mark order as ready
+      tags:
+      - restaurant-orders
+  /partner/restaurants/{restaurantID}/orders/active:
+    get:
+      description: Retrieves only active (not completed/cancelled) orders for a specific
+        restaurant
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: restaurantID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of active orders
+          schema:
+            $ref: '#/definitions/http.OrdersResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get active restaurant orders
+      tags:
+      - restaurant-orders
+  /partner/restaurants/{restaurantID}/orders/pickup:
+    get:
+      description: Looks up an order using the unique pickup code provided by the
+        customer
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: restaurantID
+        required: true
+        type: string
+      - description: Pickup code from customer
+        in: query
+        name: pickup_code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Order details
+          schema:
+            $ref: '#/definitions/http.OrderResponse'
+        "400":
+          description: Missing code or invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Order not found or code invalid
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get order by pickup code
+      tags:
+      - restaurant-orders
+  /partner/restaurants/{restaurantID}/products:
+    get:
+      description: Retrieves a list of all products (including inactive) for a specific
+        restaurant. Caller must be a restaurant staff member.
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: restaurantID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of all products
+          schema:
+            $ref: '#/definitions/http.ProductsResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get all restaurant products
+      tags:
+      - products
+    post:
+      consumes:
+      - application/json
+      description: Creates a new product for a specific restaurant. Caller must be
+        a restaurant staff member.
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: restaurantID
+        required: true
+        type: string
+      - description: Product data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created product details
+          schema:
+            $ref: '#/definitions/http.ProductResponse'
+        "400":
+          description: Validation error or invalid JSON/UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Create product
+      tags:
+      - products
+  /partner/restaurants/{restaurantID}/products/{productID}:
+    delete:
+      description: Deletes a product from the system. Caller must be a restaurant
+        staff member.
+      parameters:
+      - description: Product ID
+        format: uuid
+        in: path
+        name: productID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product successfully deleted
+          schema:
+            $ref: '#/definitions/respond.MessageResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Delete product
+      tags:
+      - products
+    get:
+      description: Retrieves detailed information about a specific product. Caller
+        must be a restaurant staff member.
+      parameters:
+      - description: Product ID
+        format: uuid
+        in: path
+        name: productID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product details
+          schema:
+            $ref: '#/definitions/http.ProductResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get product by ID
+      tags:
+      - products
+    patch:
+      consumes:
+      - application/json
+      description: Updates general information of a specific product. Caller must
+        be a restaurant staff member.
+      parameters:
+      - description: Product ID
+        format: uuid
+        in: path
+        name: productID
+        required: true
+        type: string
+      - description: Updated product data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.UpdateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated product details
+          schema:
+            $ref: '#/definitions/http.ProductResponse'
+        "400":
+          description: Validation error or invalid JSON/UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Update product
+      tags:
+      - products
+  /partner/restaurants/{restaurantID}/products/{productID}/status:
+    patch:
+      consumes:
+      - application/json
+      description: Activates or deactivates a product. Caller must be a restaurant
+        staff member.
+      parameters:
+      - description: Product ID
+        format: uuid
+        in: path
+        name: productID
+        required: true
+        type: string
+      - description: New status data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.UpdateStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Status successfully updated
+          schema:
+            $ref: '#/definitions/respond.MessageResponse'
+        "400":
+          description: Validation error or invalid JSON/UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Update product active status
+      tags:
+      - products
+  /partner/restaurants/{restaurantID}/products/{productID}/stock:
+    patch:
+      consumes:
+      - application/json
+      description: Updates the available quantity of a product. Caller must be a restaurant
+        staff member.
+      parameters:
+      - description: Product ID
+        format: uuid
+        in: path
+        name: productID
+        required: true
+        type: string
+      - description: New stock quantity data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.UpdateStockRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Stock successfully updated
+          schema:
+            $ref: '#/definitions/respond.MessageResponse'
+        "400":
+          description: Validation error or invalid JSON/UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Update product stock
+      tags:
+      - products
+  /partner/restaurants/{restaurantID}/reviews:
+    get:
+      description: Retrieves all reviews for a specific restaurant
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: restaurantID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reviews
+          schema:
+            $ref: '#/definitions/http.ReviewsResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Restaurant not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get all reviews by restaurant
+      tags:
+      - reviews
+  /partner/restaurants/{restaurantID}/reviews/{reviewID}/reply:
+    post:
+      description: Adds a reply to a specific review
+      parameters:
+      - description: Review ID
+        format: uuid
+        in: path
+        name: reviewID
+        required: true
+        type: string
+      - description: Reply details
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.AddReplyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reply added
+          schema:
+            $ref: '#/definitions/http.ReviewResponse'
+        "400":
+          description: Validation error or invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Review not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Add a reply to a review
+      tags:
+      - reviews
+  /restaurants:
+    get:
+      description: Retrieves a list of all registered restaurants
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of restaurants
+          schema:
+            $ref: '#/definitions/http.RestaurantsResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Get all restaurants
+      tags:
+      - restaurants
+  /restaurants/{id}:
+    get:
+      description: Retrieves detailed information about a specific restaurant
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Restaurant details
+          schema:
+            $ref: '#/definitions/http.RestaurantResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Restaurant not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Get restaurant by ID
+      tags:
+      - restaurants
+  /restaurants/{restaurantID}/orders/{orderID}/history:
+    get:
+      description: Retrieves the complete status history for a specific order. Caller
+        must be a restaurant staff member.
+      parameters:
+      - description: Order ID
+        format: uuid
+        in: path
+        name: orderID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of status changes
+          schema:
+            $ref: '#/definitions/http.StatusHistoryResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get order history (Restaurant)
+      tags:
+      - restaurant-orders
+  /restaurants/{restaurantID}/products:
+    get:
+      description: Retrieves a list of all active products for a specific restaurant
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: restaurantID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of active products
+          schema:
+            $ref: '#/definitions/http.ProductsResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Get active products
+      tags:
+      - products
+  /restaurants/{restaurantID}/reviews:
+    get:
+      description: Retrieves all reviews for a specific restaurant
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: restaurantID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reviews
+          schema:
+            $ref: '#/definitions/http.ReviewsResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Restaurant not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get reviews by restaurant
+      tags:
+      - reviews
+  /restaurants/{restaurantID}/reviews/photos:
+    get:
+      description: Returns a flat list of all photos from active restaurant reviews
+      parameters:
+      - description: Restaurant ID
+        format: uuid
+        in: path
+        name: restaurantID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of photos
+          schema:
+            $ref: '#/definitions/http.ReviewPhotosResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get restaurant review photos
+      tags:
+      - restaurants
+  /upload:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Delete data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.DeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Invalid authorization header
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Delete uploaded file
+      tags:
+      - upload
+  /upload/presign:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Upload data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.PresignRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.PresignResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Invalid authorization header
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "406":
+          description: Unsupported content type
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get presigned upload URL
+      tags:
+      - upload
+  /users/me:
+    delete:
+      description: Deletes the account of the currently authenticated user
+      responses:
+        "204":
+          description: No Content - User successfully deleted
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Delete current user
+      tags:
+      - users
+    get:
+      description: Retrieves the profile information of the currently authenticated
+        user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User profile data
+          schema:
+            $ref: '#/definitions/http.UserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get current user
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: Updates the profile information of the currently authenticated
+        user
+      parameters:
+      - description: Data for updating user profile
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated user profile data
+          schema:
+            $ref: '#/definitions/http.UserResponse'
+        "400":
+          description: Validation error or invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Update current user
+      tags:
+      - users
+  /users/me/devices:
+    delete:
+      consumes:
+      - application/json
+      description: Removes a push notification device token for the current user
+      parameters:
+      - description: Device token to delete
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.DeleteDeviceTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content - Token successfully deleted
+        "400":
+          description: Validation error or invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "404":
+          description: Token not found
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Delete device token
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Registers a push notification device token for the current user
+      parameters:
+      - description: Device token data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.RegisterDeviceTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Device token registered
+          schema:
+            $ref: '#/definitions/respond.MessageResponse'
+        "400":
+          description: Validation error or invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Register device token
+      tags:
+      - users
+  /users/me/email:
+    patch:
+      consumes:
+      - application/json
+      description: Updates the email of the currently authenticated user
+      parameters:
+      - description: Data for updating user email
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.UpdateEmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Email updated
+          schema:
+            $ref: '#/definitions/respond.MessageResponse'
+        "400":
+          description: Validation error or invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Update current user email
+      tags:
+      - users
+  /users/me/phone:
+    patch:
+      consumes:
+      - application/json
+      description: Updates the phone number of the currently authenticated user
+      parameters:
+      - description: Data for updating user phone
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.UpdatePhoneRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Phone updated
+          schema:
+            $ref: '#/definitions/respond.MessageResponse'
+        "400":
+          description: Validation error or invalid JSON
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Update current user phone
+      tags:
+      - users
+  /users/me/reviews:
+    get:
+      description: Retrieves all reviews for a specific user
+      parameters:
+      - description: User ID
+        format: uuid
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reviews
+          schema:
+            $ref: '#/definitions/http.ReviewsResponse'
+        "400":
+          description: Invalid UUID
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get reviews by user
+      tags:
+      - reviews
+  /webhooks/stripe/payment/confirm:
+    post:
+      consumes:
+      - application/json
+      description: Receives and verifies Stripe webhook events for payment confirmation
+      parameters:
+      - description: Stripe signature for payload verification
+        in: header
+        name: Stripe-Signature
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Webhook successfully processed
+          schema:
+            $ref: '#/definitions/respond.MessageResponse'
+        "400":
+          description: Missing signature or invalid payload
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/respond.ErrorResponse'
+      summary: Stripe webhook handler
+      tags:
+      - webhooks
+      - orders
+securityDefinitions:
+  Bearer:
+    description: 'Type "Bearer" followed by a space and JWT token. Example: "Bearer
+      eyJhbGciOiJIUzI1Ni..."'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
