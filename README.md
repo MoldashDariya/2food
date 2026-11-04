@@ -2,6 +2,8 @@
 
 2food is a mobile app that helps restaurants sell their surplus food at a discount instead of throwing it away. Customers browse offers from nearby restaurants, reserve and pay for them in the app, and pick the order up at a set time.
 
+**Team:** a final team project for a Go course, built by Dariya Moldash, Alnura Imirova and Saniya Zhaksylykova and moved here from the team's GitLab. My part (Dariya): the catalog (cities, cuisine types, product categories), reviews with photos, restaurant replies and moderation, the user profile and photo uploads to S3. The rest of the project was built by Alnura and Saniya.
+
 The repository is a monorepo with two parts:
 
 | Folder | What it is | Stack |
